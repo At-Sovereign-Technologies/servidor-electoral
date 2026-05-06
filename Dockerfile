@@ -11,7 +11,7 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN go build -o electoral-server ./...
+RUN go build -o bin/ ./...
 
 # Runtime stage
 FROM debian:bookworm-slim
@@ -19,7 +19,7 @@ FROM debian:bookworm-slim
 WORKDIR /app
 
 # Copy binary from builder
-COPY --from=builder /app/electoral-server .
+COPY --from=builder /app/bin/ .
 
 # Expose application port
 EXPOSE 8080
