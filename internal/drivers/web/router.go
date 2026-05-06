@@ -1,6 +1,8 @@
 package web
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/web/handlers"
@@ -10,7 +12,6 @@ import (
 type Router struct {
 	e                  *echo.Echo
 	electionHandler    *handlers.ElectionHandler
-	candidateHandler   *handlers.CandidateHandler
 	votingPlaceHandler *handlers.VotingPlaceHandler
 }
 
@@ -20,13 +21,18 @@ func NewRouter(
 	votingPlaceService *services.VotingPlaceService,
 ) (*Router, error) {
 	e := echo.New()
+	e.HideBanner = true
+	e.HidePort = true
+	e.HTTPErrorHandler = HTMLHTTPErrorHandler
 
-	electionHandler, err := handlers.NewElectionHandler(electionService)
+	renderer, err := NewTemplateRenderer()
 	if err != nil {
 		return nil, err
 	}
 
-	candidateHandler, err := handlers.NewCandidateHandler(candidateService)
+	e.Renderer = renderer
+
+	electionHandler, err := handlers.NewElectionHandler(electionService, candidateService)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +45,6 @@ func NewRouter(
 	r := &Router{
 		e:                  e,
 		electionHandler:    electionHandler,
-		candidateHandler:   candidateHandler,
 		votingPlaceHandler: votingPlaceHandler,
 	}
 
@@ -48,19 +53,28 @@ func NewRouter(
 }
 
 func (r *Router) registerRoutes() {
+	// Default redirection
+	r.e.GET("/", func(c echo.Context) error {
+		return c.Redirect(http.StatusTemporaryRedirect, "/elections")
+	})
+
 	// Elections
 	r.e.GET("/elections", r.electionHandler.ListElections)
 	r.e.GET("/elections/:id", r.electionHandler.GetElection)
 
 	// Candidates
-	r.e.GET("/candidates", r.candidateHandler.ListCandidates)
+	r.e.GET("/elections/:id/candidates", r.electionHandler.ListCandidates)
 
-	// Voting places (method-based)
-	r.e.GET("/voting-places", r.votingPlaceHandler.List)
-	r.e.POST("/voting-places", r.votingPlaceHandler.Post)
+	// Voting places
+	r.e.GET("/elections/:id/voting-places", r.votingPlaceHandler.List)
+	r.e.POST("/elections/:id/voting-places", r.votingPlaceHandler.Post)
 
 	// Static files
-	r.e.Static("/", "static") // or use embed if needed
+	r.e.Static("/static", "static")
+
+	r.e.RouteNotFound("/*", func(c echo.Context) error {
+		return echo.NewHTTPError(http.StatusNotFound, "Página no encontrada")
+	})
 }
 
 func (r *Router) Start(addr string) error {

@@ -1,0 +1,40 @@
+{{define "partials/voting_places_page.html"}}
+<div class="header">
+    <h1>Puestos de Votación</h1>
+
+    <a 
+        hx-get="/elections"
+        hx-target="#main-content"
+        hx-push-url="true"
+        class="btn btn-secondary"
+    >
+        ← Volver
+    </a>
+</div>
+
+<!-- CREATE -->
+<div class="card">
+    <h2>Crear puesto</h2>
+
+    <form 
+        hx-post="/elections/{{.ElectionID}}/voting-places"
+        hx-target="#places-container"
+        hx-swap="innerHTML"
+        class="form-grid"
+    >
+        <input type="hidden" name="action" value="create">
+
+        <input name="name" placeholder="Nombre" required>
+        <input name="address" placeholder="Dirección" required>
+
+        <button class="btn btn-primary">Crear</button>
+    </form>
+</div>
+
+<!-- TABLE -->
+<div 
+    id="places-container">
+    {{template "partials/voting_places_table.html" .}}
+</div>
+
+{{end}}

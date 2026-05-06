@@ -1,0 +1,90 @@
+{{define "partials/voting_places_table.html"}}
+
+{{if .Secret}}
+<div class="alert alert-success">
+    <strong>Puesto creado correctamente.</strong><br>
+    Descarga el archivo de configuración:
+
+    <br><br>
+
+    <button class="btn btn-primary"
+        onclick="downloadSecret('{{.Secret}}', {{.ElectionID}})">
+        Descargar deployment.json
+    </button>
+</div>
+{{end}}
+
+<div class="card">
+    <h2>Puestos existentes</h2>
+
+    {{if .VotingPlaces}}
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+                <th>Secreto</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {{range .VotingPlaces}}
+        <tr>
+            <td>{{.Name}}</td>
+            <td>{{.Address}}</td>
+
+            <td>
+                {{if .Disabled}}
+                    <span class="status disabled">Deshabilitado</span>
+                {{else}}
+                    <span class="status enabled">Activo</span>
+                {{end}}
+            </td>
+
+            <td>••••••••••••</td>
+
+            <td class="actions">
+                <button 
+                    hx-post="/elections/{{$.ElectionID}}/voting-places"
+                    hx-vals='{"action":"{{if .Disabled}}enable{{else}}disable{{end}}","place_id":"{{.ID}}"}'
+                    hx-target="#places-container"
+                    class="btn {{if .Disabled}}btn-primary{{else}}btn-secondary{{end}}"
+                >
+                    {{if .Disabled}}Activar{{else}}Desactivar{{end}}
+                </button>
+
+                <button 
+                    hx-post="/elections/{{$.ElectionID}}/voting-places"
+                    hx-vals='{"action":"regenerate","place_id":"{{.ID}}"}'
+                    hx-target="#places-container"
+                    class="btn btn-primary"
+                >
+                    Regenerar
+                </button>
+            </td>
+        </tr>
+        {{end}}
+        </tbody>
+    </table>
+    {{else}}
+        <p style="color:#888;">No hay puestos aún.</p>
+    {{end}}
+</div>
+
+<script>
+function downloadSecret(secret, electionID) {
+    const blob = new Blob([JSON.stringify({
+        election_id: electionID,
+        secret: secret
+    }, null, 2)], { type: "application/json" });
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "deployment.json";
+    a.click();
+}
+</script>
+
+{{end}}

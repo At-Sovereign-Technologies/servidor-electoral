@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/database"
@@ -55,11 +54,8 @@ func main() {
 	}
 
 	// Start HTTP server
-	mux := http.NewServeMux()
-	router.Register(mux)
-
 	log.Println("Starting server on :8080")
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	if err := router.Start(":8080"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }

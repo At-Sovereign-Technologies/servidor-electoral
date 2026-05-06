@@ -1,0 +1,19 @@
+{{define "partials/candidates_page.html"}}
+<div class="header">
+    <h1>Candidatos</h1>
+
+    <a 
+        hx-get="/elections"
+        hx-target="#main-content"
+        hx-push-url="true"
+        class="btn btn-secondary"
+    >
+        ← Volver a Elecciones
+    </a>
+</div>
+
+<div id="candidates-table-container">
+    {{template "partials/candidates_table.html" .}}
+</div>
+
+{{end}}

@@ -1,0 +1,53 @@
+{{define "partials/candidates_table.html"}}
+
+{{if .Candidates}}
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Partido</th>
+                <th>Ubicación</th>
+                <th>Documento</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Candidates}}
+            <tr>
+                <td>
+                    <div class="candidate-name">
+                        {{if .PictureURL}}
+                            <img src="{{.PictureURL}}" class="candidate-image">
+                        {{end}}
+                        {{.Name}}
+                    </div>
+                </td>
+                <td>{{.Party}}</td>
+                <td>{{.Location}}</td>
+                <td>{{.Document}}</td>
+                <td>
+                    <span class="status {{.Status}}">
+                        {{if eq .Status "draft"}}Borrador{{end}}
+                        {{if eq .Status "submitted"}}Enviado{{end}}
+                        {{if eq .Status "in_review"}}En revisión{{end}}
+                        {{if eq .Status "approved"}}Aprobado{{end}}
+                        {{if eq .Status "published"}}Publicado{{end}}
+                        {{if eq .Status "rejected"}}Rechazado{{end}}
+                        {{if eq .Status "blocked"}}Bloqueado{{end}}
+                        {{if eq .Status "replaced"}}Reemplazado{{end}}
+                        {{if eq .Status "revoked"}}Revocado{{end}}
+                    </span>
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</div>
+{{else}}
+<div class="no-data">
+    <p>No hay candidatos para esta elección.</p>
+</div>
+{{end}}
+
+{{end}}

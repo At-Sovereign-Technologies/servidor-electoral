@@ -1,0 +1,42 @@
+{{define "partials/election_detail.html"}}
+<header class="header">
+    <div>
+        <h1>{{.Election.Name}}</h1>
+        <span class="badge {{.Election.Status}}">
+            {{if eq .Election.Status "published"}}Publicada{{end}}
+            {{if eq .Election.Status "draft"}}Borrador{{end}}
+            {{if eq .Election.Status "ongoing"}}En curso{{end}}
+            {{if eq .Election.Status "completed"}}Finalizada{{end}}
+            {{if eq .Election.Status "archived"}}Archivada{{end}}
+        </span>
+    </div>
+
+    <!-- HTMX navigation back -->
+    <a 
+        hx-get="/elections"
+        hx-target="#main-content"
+        hx-push-url="true"
+        class="btn btn-secondary"
+    >
+        ← Volver a Elecciones
+    </a>
+</header>
+
+<main>
+    <!-- INFO CARD -->
+    <div class="card">
+        <h2>Información General</h2>
+        <div class="row"><strong>Inicio:</strong> {{.Start}}</div>
+        <div class="row"><strong>Fin:</strong> {{.End}}</div>
+        <div class="row"><strong>ID:</strong> {{.Election.ID}}</div>
+    </div>
+
+    <!-- CANDIDATES SECTION -->
+    <div class="card">
+        <h2>Candidatos</h2>
+        <div id="candidates-table-container">
+            {{template "partials/candidates_table.html" .}}
+        </div>
+    </div>
+</main>
+{{end}}
