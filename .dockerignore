@@ -1,0 +1,14 @@
+bin/
+*.exe
+*.dll
+*.so
+*.test
+.git
+.gitignore
+node_modules
+vendor
+**/node_modules
+**/*.log
+**/*.swp
+tmp
+*.local
