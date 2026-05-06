@@ -18,10 +18,10 @@ type Election struct {
 	EndDate   time.Time `gorm:"not null" validate:"required,gtfield=StartDate"`
 	Secret    string    `gorm:"size:32;not null" validate:"required,len=32"`
 
-	Candidates   []Candidate          `gorm:"constraint:OnDelete:CASCADE" validate:"-"`
-	Voters       []Voter              `gorm:"constraint:OnDelete:CASCADE" validate:"-"`
-	VotingPlaces []VotingPlace        `gorm:"constraint:OnDelete:CASCADE" validate:"-"`
-	Deployments  []ElectionDeployment `gorm:"constraint:OnDelete:CASCADE" validate:"-"`
+	Candidates   []Candidate         `gorm:"constraint:OnDelete:CASCADE" validate:"-"`
+	Voters       []Voter             `gorm:"constraint:OnDelete:CASCADE" validate:"-"`
+	VotingPlaces []VotingPlace       `gorm:"constraint:OnDelete:CASCADE" validate:"-"`
+	Deployment   *ElectionDeployment `gorm:"constraint:OnDelete:CASCADE" validate:"-"`
 }
 
 func (e *Election) Validate() error {

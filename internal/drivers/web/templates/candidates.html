@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidatos</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: ui-sans-serif, system-ui, sans-serif,
+                        "Apple Color Emoji", "Segoe UI Emoji",
+                        "Segoe UI Symbol", "Noto Color Emoji";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: #f5f6f8;
+            color: #111;
+        }
+
+        /* NAVBAR (igual a elections.html) */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            width: 100%;
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 16px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+
+        .brand-sub {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #e53935;
+        }
+
+        /* PAGE */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* TABLE */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #fafafa;
+        }
+
+        th {
+            text-align: left;
+            padding: 14px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #666;
+            border-bottom: 1px solid #eee;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        /* Candidate info */
+        .candidate-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .candidate-image {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* STATUS */
+        .status {
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .draft { background: #fff3e0; color: #e65100; }
+        .submitted { background: #e3f2fd; color: #1565c0; }
+        .in_review { background: #fff8e1; color: #f57f17; }
+        .approved { background: #e8f5e9; color: #2e7d32; }
+        .published { background: #e8f5e9; color: #2e7d32; }
+        .rejected { background: #ffebee; color: #c62828; }
+        .blocked { background: #eceff1; color: #455a64; }
+        .replaced { background: #f3e5f5; color: #6a1b9a; }
+        .revoked { background: #ffebee; color: #c62828; }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.8rem;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="nav-left">
+            <div class="brand">Sello Legítimo</div>
+            <div class="brand-sub">SISTEMA ELECTORAL COLOMBIANO</div>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="container">
+
+        <div class="header">
+            <h1>Candidatos</h1>
+            <a href="/elections" class="btn btn-secondary">← Volver a Elecciones</a>
+        </div>
+
+        {{if .candidates}}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Partido</th>
+                            <th>Ubicación</th>
+                            <th>Documento</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .candidates}}
+                            <tr>
+                                <td>
+                                    <div class="candidate-name">
+                                        {{if .PictureURL}}
+                                            <img src="{{.PictureURL}}" class="candidate-image">
+                                        {{end}}
+                                        {{.Name}}
+                                    </div>
+                                </td>
+                                <td>{{.Party}}</td>
+                                <td>{{.Location}}</td>
+                                <td>{{.Document}}</td>
+                                <td>
+                                    <span class="status {{.Status}}">
+                                        {{if eq .Status "draft"}}Borrador{{end}}
+                                        {{if eq .Status "submitted"}}Enviado{{end}}
+                                        {{if eq .Status "in_review"}}En revisión{{end}}
+                                        {{if eq .Status "approved"}}Aprobado{{end}}
+                                        {{if eq .Status "published"}}Publicado{{end}}
+                                        {{if eq .Status "rejected"}}Rechazado{{end}}
+                                        {{if eq .Status "blocked"}}Bloqueado{{end}}
+                                        {{if eq .Status "replaced"}}Reemplazado{{end}}
+                                        {{if eq .Status "revoked"}}Revocado{{end}}
+                                    </span>
+                                </td>
+                            </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        {{else}}
+            <div class="no-data">
+                <p>No hay candidatos para esta elección.</p>
+            </div>
+        {{end}}
+
+    </div>
+
+</body>
+</html>

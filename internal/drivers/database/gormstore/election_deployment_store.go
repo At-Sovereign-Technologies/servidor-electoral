@@ -12,10 +12,14 @@ func (s *GormElectionDeploymentStore) Create(ed *models.ElectionDeployment) erro
 	return translateError(s.DB.Create(ed).Error)
 }
 
-func (s *GormElectionDeploymentStore) GetByElection(electionID uint) ([]models.ElectionDeployment, error) {
-	var deployments []models.ElectionDeployment
-	err := s.DB.Where("election_id = ?", electionID).Find(&deployments).Error
-	return deployments, translateError(err)
+func (s *GormElectionDeploymentStore) GetByElection(electionID uint) (*models.ElectionDeployment, error) {
+	var deployment models.ElectionDeployment
+	err := s.DB.Where("election_id = ?", electionID).First(&deployment).Error
+	return &deployment, translateError(err)
+}
+
+func (s *GormElectionDeploymentStore) Update(ed *models.ElectionDeployment) error {
+	return translateResult(s.DB.Save(ed))
 }
 
 func (s *GormElectionDeploymentStore) Delete(id uint) error {

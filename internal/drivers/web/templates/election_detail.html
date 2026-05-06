@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Elección</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: ui-sans-serif, system-ui, sans-serif,
+                        "Apple Color Emoji", "Segoe UI Emoji",
+                        "Segoe UI Symbol", "Noto Color Emoji";
+            background: #f5f6f8;
+            color: #111;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 16px 40px;
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        .brand-sub {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #e53935;
+        }
+
+        /* PAGE */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .published { background: #e8f5e9; color: #2e7d32; }
+        .draft { background: #fff3e0; color: #e65100; }
+        .ongoing { background: #e3f2fd; color: #1565c0; }
+        .completed { background: #f3e5f5; color: #6a1b9a; }
+        .archived { background: #eceff1; color: #455a64; }
+
+        .card {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        .row {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-primary {
+            background: #e53935;
+            color: white;
+        }
+
+        /* TABLE */
+        .table-container {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #fafafa;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 12px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .candidate-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .candidate-image {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .status {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .submitted { background: #e3f2fd; color: #1565c0; }
+        .in_review { background: #fff8e1; color: #f57f17; }
+        .approved { background: #e8f5e9; color: #2e7d32; }
+        .rejected { background: #ffebee; color: #c62828; }
+
+        .empty {
+            padding: 20px;
+            color: #888;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="brand">Sello Legítimo</div>
+    <div class="brand-sub">SISTEMA ELECTORAL COLOMBIANO</div>
+</div>
+
+<div class="container">
+
+    <a href="/elections" class="btn btn-secondary">← Volver</a>
+
+    <h1>{{.Election.Name}}</h1>
+
+    <span class="badge {{.Election.Status}}">
+        {{if eq .Election.Status "published"}}Publicada{{end}}
+        {{if eq .Election.Status "draft"}}Borrador{{end}}
+        {{if eq .Election.Status "ongoing"}}En curso{{end}}
+        {{if eq .Election.Status "completed"}}Finalizada{{end}}
+        {{if eq .Election.Status "archived"}}Archivada{{end}}
+    </span>
+
+    <!-- INFO -->
+    <div class="card">
+        <h2>Información General</h2>
+        <div class="row"><strong>Inicio:</strong> {{.Start}}</div>
+        <div class="row"><strong>Fin:</strong> {{.End}}</div>
+        <div class="row"><strong>ID:</strong> {{.Election.ID}}</div>
+    </div>
+
+    <!-- CANDIDATOS -->
+    <div class="card">
+        <h2>Candidatos</h2>
+
+        {{if .Election.Candidates}}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Partido</th>
+                            <th>Ubicación</th>
+                            <th>Documento</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Election.Candidates}}
+                        <tr>
+                            <td>
+                                <div class="candidate-name">
+                                    {{if .PictureURL}}
+                                        <img src="{{.PictureURL}}" class="candidate-image">
+                                    {{end}}
+                                    {{.Name}}
+                                </div>
+                            </td>
+                            <td>{{.Party}}</td>
+                            <td>{{.Location}}</td>
+                            <td>{{.Document}}</td>
+                            <td>
+                                <span class="status {{.Status}}">
+                                    {{if eq .Status "submitted"}}Enviado{{end}}
+                                    {{if eq .Status "in_review"}}En revisión{{end}}
+                                    {{if eq .Status "approved"}}Aprobado{{end}}
+                                    {{if eq .Status "rejected"}}Rechazado{{end}}
+                                </span>
+                            </td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        {{else}}
+            <div class="empty">No hay candidatos.</div>
+        {{end}}
+    </div>
+
+</div>
+
+</body>
+</html>

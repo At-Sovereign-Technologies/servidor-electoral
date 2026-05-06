@@ -2,11 +2,13 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/database"
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/database/gormstore"
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/mock"
+	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/web"
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/populator"
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/services"
 )
@@ -24,15 +26,16 @@ func main() {
 	store := gormstore.Store{DB: database.GetDB()}
 	electionStore := &gormstore.GormElectionStore{Store: store}
 	candidateStore := &gormstore.GormCandidateStore{Store: store}
+	votingPlaceStore := &gormstore.GormVotingPlaceStore{Store: store}
 	// voterStore := &gormstore.GormVoterStore{Store: store}
 	// votingBoothStore := &gormstore.GormVotingBoothStore{Store: store}
-	// votingPlaceStore := &gormstore.GormVotingPlaceStore{Store: store}
 	// electionDeploymentStore := &gormstore.GormElectionDeploymentStore{Store: store}
 
 	// Service creation
 	authService := &services.AuthService{}
 	electionService := &services.ElectionService{ElectionStore: electionStore, AuthService: authService}
 	candidateService := &services.CandidateService{CandidateStore: candidateStore}
+	votingPlaceService := &services.VotingPlaceService{VotingPlaceStore: votingPlaceStore, AuthService: authService}
 
 	// Populator creation
 	populator := populator.NewElectionPopulator(populator.Options{
@@ -45,5 +48,18 @@ func main() {
 	populator.Start()
 	defer populator.Stop()
 
-	select {}
+	// Router creation
+	router, err := web.NewRouter(electionService, candidateService, votingPlaceService)
+	if err != nil {
+		log.Fatalf("Failed to create router: %v", err)
+	}
+
+	// Start HTTP server
+	mux := http.NewServeMux()
+	router.Register(mux)
+
+	log.Println("Starting server on :8080")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

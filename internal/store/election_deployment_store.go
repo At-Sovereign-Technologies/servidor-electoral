@@ -6,7 +6,7 @@ import (
 
 type ElectionDeploymentStore interface {
 	Create(ed *models.ElectionDeployment) error
-	GetByElection(electionID uint) ([]models.ElectionDeployment, error)
+	GetByElection(electionID uint) (*models.ElectionDeployment, error)
 	Update(ed *models.ElectionDeployment) error
 	Delete(id uint) error
 }
