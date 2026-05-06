@@ -1,0 +1,73 @@
+{{define "partials/workers_page.html"}}
+<div class="header">
+    <h1>Trabajadores Activos</h1>
+
+    <a 
+        hx-get="/elections/{{.ElectionID}}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        class="btn btn-secondary"
+    >
+        ← Volver
+    </a>
+</div>
+
+{{if .WorkerConfig}}
+<div class="alert alert-success">
+    <strong>Puesto creado correctamente.</strong><br>
+    Descarga el archivo de configuración:
+
+    <br><br>
+
+    <button class="btn btn-primary"
+        onclick="downloadSecret()">
+        Descargar worker_config.yaml
+    </button>
+</div>
+{{end}}
+
+
+<!-- CREATE -->
+<div class="card">
+    <h2>Registrar Trabajador</h2>
+
+    <form 
+        hx-post="/elections/{{.ElectionID}}/workers"
+        hx-target="#main-content"
+        hx-swap="innerHTML"
+        class="form-group"
+    >
+        <input type="hidden" name="action" value="create">
+        
+        <div class="form-row">
+            <input name="name" placeholder="Nombre Comun" required>
+            <button class="btn btn-primary">Crear</button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE -->
+<div 
+    id="workers-container">
+    {{template "partials/workers_table.html" .}}
+</div>
+
+
+<script>
+function downloadSecret() {
+    const yaml = `worker_id: {{.WorkerConfig.Worker.ID}}
+worker_name: {{.WorkerConfig.Worker.Name}}
+cert: |
+{{.WorkerConfig.CertPEM}}
+key: |
+{{.WorkerConfig.KeyPEM}}
+endpoint: {{.WorkerConfig.Endpoint}}
+`;
+    const blob = new Blob([yaml], { type: "text/yaml" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "worker_config.yaml";
+    a.click();
+}
+</script>
+{{end}}

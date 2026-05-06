@@ -55,5 +55,6 @@ func Migrate() error {
 		&models.VotingPlace{},
 		&models.VotingBooth{},
 		&models.Voter{},
+		&models.ElectionWorker{},
 	)
 }

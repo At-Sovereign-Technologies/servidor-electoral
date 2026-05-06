@@ -26,9 +26,9 @@
     <!-- INFO CARD -->
     <div class="card">
         <h2>Información General</h2>
+        <div class="row"><strong>ID:</strong> {{.Election.ID}}</div>
         <div class="row"><strong>Inicio:</strong> {{.Start}}</div>
         <div class="row"><strong>Fin:</strong> {{.End}}</div>
-        <div class="row"><strong>ID:</strong> {{.Election.ID}}</div>
     </div>
 
     <!-- CANDIDATES SECTION -->
@@ -36,6 +36,23 @@
         <h2>Candidatos</h2>
         <div id="candidates-table-container">
             {{template "partials/candidates_table.html" .}}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="span">
+            <h2>Workers</h2>
+            <a 
+                hx-get="/elections/{{.Election.ID}}/workers"
+                hx-target="#main-content"
+                hx-push-url="true"
+                class="btn btn-primary"
+            >
+                Administrar
+            </a>
+        </div>
+        <div id="candidates-table-container">
+            {{template "partials/workers_table.html" .}}
         </div>
     </div>
 </main>

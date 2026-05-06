@@ -12,6 +12,20 @@
     </a>
 </div>
 
+{{if .Secret}}
+<div class="alert alert-success">
+    <strong>Puesto creado correctamente.</strong><br>
+    Descarga el archivo de configuración:
+
+    <br><br>
+
+    <button class="btn btn-primary"
+        onclick="downloadSecret('{{.Secret}}', {{.ElectionID}})">
+        Descargar deployment.json
+    </button>
+</div>
+{{end}}
+
 <!-- CREATE -->
 <div class="card">
     <h2>Crear puesto</h2>
@@ -37,4 +51,17 @@
     {{template "partials/voting_places_table.html" .}}
 </div>
 
+<script>
+function downloadSecret(secret, electionID) {
+    const blob = new Blob([JSON.stringify({
+        election_id: electionID,
+        secret: secret
+    }, null, 2)], { type: "application/json" });
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "deployment.json";
+    a.click();
+}
+</script>
 {{end}}

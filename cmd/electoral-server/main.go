@@ -26,15 +26,21 @@ func main() {
 	electionStore := &gormstore.GormElectionStore{Store: store}
 	candidateStore := &gormstore.GormCandidateStore{Store: store}
 	votingPlaceStore := &gormstore.GormVotingPlaceStore{Store: store}
+	workerStore := &gormstore.GormWorkerStore{Store: store}
 	// voterStore := &gormstore.GormVoterStore{Store: store}
 	// votingBoothStore := &gormstore.GormVotingBoothStore{Store: store}
 	// electionDeploymentStore := &gormstore.GormElectionDeploymentStore{Store: store}
 
 	// Service creation
-	authService := &services.AuthService{}
+	authService, err := services.NewAuthService("config")
+	if err != nil {
+		log.Fatalf("Failed to create auth service: %v", err)
+	}
+
 	electionService := &services.ElectionService{ElectionStore: electionStore, AuthService: authService}
 	candidateService := &services.CandidateService{CandidateStore: candidateStore}
 	votingPlaceService := &services.VotingPlaceService{VotingPlaceStore: votingPlaceStore, AuthService: authService}
+	workerService := &services.WorkerService{AuthService: authService, WorkerStore: workerStore}
 
 	// Populator creation
 	populator := populator.NewElectionPopulator(populator.Options{
@@ -48,7 +54,7 @@ func main() {
 	defer populator.Stop()
 
 	// Router creation
-	router, err := web.NewRouter(electionService, candidateService, votingPlaceService)
+	router, err := web.NewRouter(electionService, candidateService, votingPlaceService, workerService)
 	if err != nil {
 		log.Fatalf("Failed to create router: %v", err)
 	}

@@ -353,6 +353,14 @@ tr:hover {
     color: #888;
 }
 
+.span {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
 /* MOBILE */
 @media (max-width: 768px) {
     .election-card {

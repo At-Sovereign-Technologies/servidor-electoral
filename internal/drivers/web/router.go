@@ -13,14 +13,17 @@ type Router struct {
 	e                  *echo.Echo
 	electionHandler    *handlers.ElectionHandler
 	votingPlaceHandler *handlers.VotingPlaceHandler
+	workersHandler     *handlers.WorkerHandler
 }
 
 func NewRouter(
 	electionService *services.ElectionService,
 	candidateService *services.CandidateService,
 	votingPlaceService *services.VotingPlaceService,
+	workerService *services.WorkerService,
 ) (*Router, error) {
 	e := echo.New()
+
 	e.HideBanner = true
 	e.HidePort = true
 	e.HTTPErrorHandler = HTMLHTTPErrorHandler
@@ -42,10 +45,16 @@ func NewRouter(
 		return nil, err
 	}
 
+	workerHandler, err := handlers.NewWorkerHandler(workerService)
+	if err != nil {
+		return nil, err
+	}
+
 	r := &Router{
 		e:                  e,
 		electionHandler:    electionHandler,
 		votingPlaceHandler: votingPlaceHandler,
+		workersHandler:     workerHandler,
 	}
 
 	r.registerRoutes()
@@ -68,6 +77,10 @@ func (r *Router) registerRoutes() {
 	// Voting places
 	r.e.GET("/elections/:id/voting-places", r.votingPlaceHandler.List)
 	r.e.POST("/elections/:id/voting-places", r.votingPlaceHandler.Post)
+
+	// Workers
+	r.e.GET("/elections/:id/workers", r.workersHandler.List)
+	r.e.POST("/elections/:id/workers", r.workersHandler.Post)
 
 	// Static files
 	r.e.Static("/static", "static")

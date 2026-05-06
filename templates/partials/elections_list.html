@@ -22,33 +22,15 @@
             </div>
         </div>
 
-            <div class="election-actions">
+        <div class="election-actions">
             <!-- HTMX navigation -->
             <a 
                 hx-get="/elections/{{.ID}}" 
                 hx-target="#main-content"
                 hx-push-url="true"
-                class="btn btn-secondary"
-            >
-                Ver Detalles
-            </a>
-
-            <a
-                hx-get="/elections/{{.ID}}/candidates"
-                hx-target="#main-content"
-                hx-push-url="true"
                 class="btn btn-primary"
             >
-                Candidatos
-            </a>
-
-            <a
-                hx-get="/elections/{{.ID}}/voting-places"
-                hx-target="#main-content"
-                hx-push-url="true"
-                class="btn btn-secondary"
-            >
-                Puestos
+                Ver Detalles
             </a>
         </div>
 
