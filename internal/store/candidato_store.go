@@ -7,6 +7,7 @@ import (
 type CandidatoStore interface {
 	Create(c *models.Candidato) error
 	GetByID(id uint) (*models.Candidato, error)
+	GetByEleccionID(eleccionID uint) ([]models.Candidato, error)
 	List() ([]models.Candidato, error)
 	Update(c *models.Candidato) error
 	Delete(id uint) error

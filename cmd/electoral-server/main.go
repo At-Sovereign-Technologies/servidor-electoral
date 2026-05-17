@@ -6,9 +6,11 @@ import (
 
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/database"
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/database/gormstore"
+	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/graph"
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/drivers/mock"
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/populator"
 	"github.com/At-Sovereign-Technologies/servidor-electoral/internal/services"
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
@@ -32,7 +34,7 @@ func main() {
 	juradoStore := &gormstore.GormJuradoStore{Store: store}
 	terminalStore := &gormstore.GormTerminalStore{Store: store}
 	votanteStore := &gormstore.GormVotanteStore{Store: store}
-	// nodoStore := &gormstore.GormNodoStore{Store: store}
+	nodoStore := &gormstore.GormNodoStore{Store: store}
 
 	// Service creation
 	eleccionService := &services.EleccionService{Store: eleccionStore}
@@ -41,7 +43,7 @@ func main() {
 	juradoService := &services.JuradoService{Store: juradoStore}
 	terminalService := &services.TerminalService{Store: terminalStore}
 	votanteService := &services.VotanteService{Store: votanteStore}
-	// nodoService := &services.NodoService{Store: nodoStore}
+	nodoService := &services.NodoService{Store: nodoStore}
 
 	// Populator creation
 	populator := populator.NewElectionPopulator(populator.Options{
@@ -57,20 +59,31 @@ func main() {
 
 	log.Println("Starting election populator...")
 
+	// Start the populator in a separate goroutine
 	populator.Start()
 	defer populator.Stop()
 
 	// Router creation
-	// router, err := web.NewRouter(eleccionService, candidatoService, puntoService, juradoService)
-	// if err != nil {
-	// 	log.Fatalf("Failed to create router: %v", err)
-	// }
+	router := echo.New()
+	router.HideBanner = true
+	router.HidePort = true
 
-	// Start HTTP server
-	// log.Println("Starting server on :8080")
-	// if err := router.Start(":8080"); err != nil {
-	// 	log.Fatalf("Failed to start server: %v", err)
-	// }
+	// GraphQL handler creation
+	graphQLHandler := graph.NewGraphQLHandler(
+		eleccionService,
+		candidatoService,
+		puntoService,
+		juradoService,
+		terminalService,
+		votanteService,
+		nodoService,
+	)
 
-	select {}
+	// Register GraphQL handlers
+	graphQLHandler.Register(router)
+
+	log.Println("Starting server on :8080")
+	if err := router.Start(":8080"); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

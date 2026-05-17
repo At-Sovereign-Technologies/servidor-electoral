@@ -44,6 +44,10 @@ func (s *TerminalService) GetByID(id uint) (*models.Terminal, error) {
 	return s.Store.GetByID(id)
 }
 
+func (s *TerminalService) GetByPuntoID(puntoID uint) ([]models.Terminal, error) {
+	return s.Store.GetByPuntoID(puntoID)
+}
+
 func (s *TerminalService) List() ([]models.Terminal, error) {
 	return s.Store.List()
 }

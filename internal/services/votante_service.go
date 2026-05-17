@@ -43,6 +43,10 @@ func (s *VotanteService) GetByID(id uint) (*models.Votante, error) {
 	return s.Store.GetByID(id)
 }
 
+func (s *VotanteService) GetByTerminalID(terminalID uint) ([]models.Votante, error) {
+	return s.Store.GetByTerminalID(terminalID)
+}
+
 func (s *VotanteService) List() ([]models.Votante, error) {
 	return s.Store.List()
 }

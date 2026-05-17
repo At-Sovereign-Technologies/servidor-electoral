@@ -7,6 +7,7 @@ import (
 type VotanteStore interface {
 	Create(v *models.Votante) error
 	GetByID(id uint) (*models.Votante, error)
+	GetByTerminalID(terminalID uint) ([]models.Votante, error)
 	List() ([]models.Votante, error)
 	Update(v *models.Votante) error
 	Delete(id uint) error

@@ -18,6 +18,12 @@ func (s *GormVotanteStore) GetByID(id uint) (*models.Votante, error) {
 	return &v, translateError(err)
 }
 
+func (s *GormVotanteStore) GetByTerminalID(terminalID uint) ([]models.Votante, error) {
+	var votantes []models.Votante
+	err := s.DB.Where("terminal_id = ?", terminalID).Find(&votantes).Error
+	return votantes, translateError(err)
+}
+
 func (s *GormVotanteStore) List() ([]models.Votante, error) {
 	var votantes []models.Votante
 	err := s.DB.Find(&votantes).Error

@@ -18,6 +18,12 @@ func (s *GormJuradoStore) GetByID(id uint) (*models.Jurado, error) {
 	return &j, translateError(err)
 }
 
+func (s *GormJuradoStore) GetByPuntoID(puntoID uint) ([]models.Jurado, error) {
+	var jurados []models.Jurado
+	err := s.DB.Where("punto_id = ?", puntoID).Find(&jurados).Error
+	return jurados, translateError(err)
+}
+
 func (s *GormJuradoStore) List() ([]models.Jurado, error) {
 	var jurados []models.Jurado
 	err := s.DB.Find(&jurados).Error

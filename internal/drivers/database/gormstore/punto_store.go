@@ -18,6 +18,12 @@ func (s *GormPuntoStore) GetByID(id uint) (*models.Punto, error) {
 	return &p, translateError(err)
 }
 
+func (s *GormPuntoStore) GetByEleccionID(eleccionID uint) ([]models.Punto, error) {
+	var puntos []models.Punto
+	err := s.DB.Where("eleccion_id = ?", eleccionID).Preload("Jurados").Preload("Terminales").Find(&puntos).Error
+	return puntos, translateError(err)
+}
+
 func (s *GormPuntoStore) List() ([]models.Punto, error) {
 	var puntos []models.Punto
 	err := s.DB.Preload("Jurados").Preload("Terminales").Find(&puntos).Error
