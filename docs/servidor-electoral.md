@@ -168,7 +168,8 @@ NO ESTA
         "nombre": "Puesto Avenida Chile",
         "latitud": 10.99,
         "longitud": 44.34,
-        "jwt": "(jwt)", // Esto es el bearer token
+        "activo": true,
+        "secreto": "(jwt)", // Esto es el bearer token
 
         "jurados": [{
             "id": 1,
@@ -180,8 +181,9 @@ NO ESTA
 
         "terminales": [{
             "id": 1,
-            "jwt": "(jwt)", // Esto es el bearer token
-            "secreto": "(secreto)", // Esto es el secreto del puesto para firmar Ed25519
+            "secreto": "(jwt)", // Esto es el bearer token
+            "clave_publica": "(clave Ed25519)", // Esto es el secreto del puesto para firmar Ed25519
+            "activo": true,
             "votantes": [{
                 "id": 1,
                 "nombre": "Augusto Pedicino",
@@ -198,7 +200,10 @@ NO ESTA
 ```json
 {
     "id": 1,
-    "jwt": "(jwt)"
+    "secreto": "(jwt)",
+    "server_url": "https://electoral.sello-legitimo.site/",
+    "database_url": "postgres://postgres@postgres:5432/votacion",
+    "queue_url": "amqps://user:password@host:port/vhost"
 }
 ```
 
@@ -206,8 +211,9 @@ NO ESTA
 ```json
 {
     "id": 1,
-    "jwt": "(jwt)",
-    "secreto": "(secreto)",
+    "secreto": "(jwt)",
+    "clave_privada": "(secreto)",
+    "cluster_url": "https://nodo-votacion.local/"
 }
 ```
 
@@ -215,6 +221,7 @@ NO ESTA
 ```json
 {
     "id": 1,
-    "jwt": "(jwt)"
+    "secreto": "(jwt)",
+    "parent_url": "https://maquina-jurado.local/"
 }
 ```

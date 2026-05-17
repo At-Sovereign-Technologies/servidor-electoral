@@ -47,7 +47,8 @@ votos enviados desde la votacion activa y mantener trazabilidad.
         "nombre": "Puesto Avenida Chile",
         "latitud": 10.99,
         "longitud": 44.34,
-        "jwt": "(jwt)", // Esto es el bearer token
+        "activo": true,
+        "secreto": "(jwt)", // Esto es el bearer token
 
         "jurados": [{
             "id": 1,
@@ -59,8 +60,9 @@ votos enviados desde la votacion activa y mantener trazabilidad.
 
         "terminales": [{
             "id": 1,
-            "jwt": "(jwt)", // Esto es el bearer token
-            "secreto": "(secreto)", // Esto es el secreto del puesto para firmar Ed25519
+            "secreto": "(jwt)", // Esto es el bearer token
+            "clave_publica": "(clave Ed25519)", // Esto es el secreto del puesto para firmar Ed25519
+            "activo": true,
             "votantes": [{
                 "id": 1,
                 "nombre": "Augusto Pedicino",
