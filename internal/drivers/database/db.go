@@ -49,12 +49,12 @@ func GetDB() *gorm.DB {
 
 func Migrate() error {
 	return instance.AutoMigrate(
-		&models.Election{},
-		&models.Candidate{},
-		&models.ElectionDeployment{},
-		&models.VotingPlace{},
-		&models.VotingBooth{},
-		&models.Voter{},
-		&models.ElectionWorker{},
+		&models.Eleccion{},
+		&models.Nodo{},
+		&models.Candidato{},
+		&models.Terminal{},
+		&models.Punto{},
+		&models.Jurado{},
+		&models.Votante{},
 	)
 }
