@@ -47,6 +47,7 @@ votos enviados desde la votacion activa y mantener trazabilidad.
         "nombre": "Puesto Avenida Chile",
         "latitud": 10.99,
         "longitud": 44.34,
+        "activo": true,
         "jwt": "(jwt)", // Esto es el bearer token
 
         "jurados": [{
@@ -60,6 +61,7 @@ votos enviados desde la votacion activa y mantener trazabilidad.
         "terminales": [{
             "id": 1,
             "jwt": "(jwt)", // Esto es el bearer token
+            "activo": true,
             "secreto": "(secreto)", // Esto es el secreto del puesto para firmar Ed25519
             "votantes": [{
                 "id": 1,
