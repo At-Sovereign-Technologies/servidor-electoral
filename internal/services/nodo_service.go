@@ -43,6 +43,10 @@ func (s *NodoService) GetByID(id uint) (*models.Nodo, error) {
 	return s.Store.GetByID(id)
 }
 
+func (s *NodoService) GetByEleccionID(eleccionID uint) ([]models.Nodo, error) {
+	return s.Store.GetByEleccionID(eleccionID)
+}
+
 func (s *NodoService) List() ([]models.Nodo, error) {
 	return s.Store.List()
 }

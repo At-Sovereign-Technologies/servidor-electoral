@@ -45,6 +45,10 @@ func (s *JuradoService) GetByID(id uint) (*models.Jurado, error) {
 	return s.Store.GetByID(id)
 }
 
+func (s *JuradoService) GetByPuntoID(puntoID uint) ([]models.Jurado, error) {
+	return s.Store.GetByPuntoID(puntoID)
+}
+
 func (s *JuradoService) List() ([]models.Jurado, error) {
 	return s.Store.List()
 }

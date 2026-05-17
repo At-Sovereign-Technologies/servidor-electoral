@@ -1,0 +1,15 @@
+schema:
+  - ./*.graphql
+
+exec:
+  filename: internal/drivers/graph/exec.go
+  package: graph
+
+model:
+  filename: internal/drivers/graph/models.go
+  package: graph
+
+resolver:
+  layout: single-file
+  filename: internal/drivers/graph/resolver.go
+  package: graph

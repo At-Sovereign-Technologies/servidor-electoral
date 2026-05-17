@@ -45,6 +45,10 @@ func (s *CandidatoService) GetByID(id uint) (*models.Candidato, error) {
 	return s.Store.GetByID(id)
 }
 
+func (s *CandidatoService) GetByEleccionID(eleccionID uint) ([]models.Candidato, error) {
+	return s.Store.GetByEleccionID(eleccionID)
+}
+
 func (s *CandidatoService) List() ([]models.Candidato, error) {
 	return s.Store.List()
 }

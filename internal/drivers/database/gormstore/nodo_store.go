@@ -18,6 +18,12 @@ func (s *GormNodoStore) GetByID(id uint) (*models.Nodo, error) {
 	return &n, translateError(err)
 }
 
+func (s *GormNodoStore) GetByEleccionID(eleccionID uint) ([]models.Nodo, error) {
+	var nodos []models.Nodo
+	err := s.DB.Where("eleccion_id = ?", eleccionID).Find(&nodos).Error
+	return nodos, translateError(err)
+}
+
 func (s *GormNodoStore) List() ([]models.Nodo, error) {
 	var nodos []models.Nodo
 	err := s.DB.Find(&nodos).Error

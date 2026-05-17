@@ -1,0 +1,109 @@
+type Query {
+  # Elections
+  elecciones: [Eleccion!]!
+  eleccion(id: ID!): Eleccion
+
+  # Candidates
+  candidatosByEleccion(eleccionId: ID!): [Candidato!]!
+  candidato(id: ID!): Candidato
+
+  # Voting Points
+  puntosByEleccion(eleccionId: ID!): [Punto!]!
+  punto(id: ID!): Punto
+
+  # Terminals
+  terminalesByPunto(puntoId: ID!): [Terminal!]!
+  terminal(id: ID!): Terminal
+
+  # Voters
+  votantesByTerminal(terminalId: ID!): [Votante!]!
+  votante(id: ID!): Votante
+
+  # Supervisors
+  juradosByPunto(puntoId: ID!): [Jurado!]!
+  jurado(id: ID!): Jurado
+
+  # Voting Nodes
+  nodosByEleccion(eleccionId: ID!): [Nodo!]!
+  nodo(id: ID!): Nodo
+}
+
+type Eleccion {
+  id: ID!
+  nombre: String!
+  tipoEleccion: TipoEleccion!
+  fechaInicio: Int!
+  fechaFin: Int!
+  candidatos: [Candidato!]!
+  puntos: [Punto!]!
+  nodos: [Nodo!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum TipoEleccion {
+  PRESIDENCIAL
+  LEGISLATIVA
+  TERRITORIAL
+}
+
+type Candidato {
+  id: ID!
+  nombre: String!
+  documento: String!
+  partido: String!
+  fotoUrl: String!
+  eleccionId: ID!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Punto {
+  id: ID!
+  nombre: String!
+  latitud: Float!
+  longitud: Float!
+  activo: Boolean!
+  eleccionId: ID!
+  jurados: [Jurado!]!
+  terminales: [Terminal!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Terminal {
+  id: ID!
+  activo: Boolean!
+  puntoId: ID!
+  clavePublica: String!
+  votantes: [Votante!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Votante {
+  id: ID!
+  nombre: String!
+  documento: String!
+  terminalId: ID!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Jurado {
+  id: ID!
+  nombre: String!
+  documento: String!
+  usuario: String!
+  puntoId: ID!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Nodo {
+  id: ID!
+  activo: Boolean!
+  eleccionId: ID!
+  createdAt: String!
+  updatedAt: String!
+}

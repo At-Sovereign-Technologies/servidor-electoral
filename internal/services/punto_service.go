@@ -46,6 +46,10 @@ func (s *PuntoService) GetByID(id uint) (*models.Punto, error) {
 	return s.Store.GetByID(id)
 }
 
+func (s *PuntoService) GetByEleccionID(eleccionID uint) ([]models.Punto, error) {
+	return s.Store.GetByEleccionID(eleccionID)
+}
+
 func (s *PuntoService) List() ([]models.Punto, error) {
 	return s.Store.List()
 }

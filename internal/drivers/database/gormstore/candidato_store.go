@@ -18,6 +18,12 @@ func (s *GormCandidatoStore) GetByID(id uint) (*models.Candidato, error) {
 	return &c, translateError(err)
 }
 
+func (s *GormCandidatoStore) GetByEleccionID(eleccionID uint) ([]models.Candidato, error) {
+	var candidatos []models.Candidato
+	err := s.DB.Where("eleccion_id = ?", eleccionID).Find(&candidatos).Error
+	return candidatos, translateError(err)
+}
+
 func (s *GormCandidatoStore) List() ([]models.Candidato, error) {
 	var candidatos []models.Candidato
 	err := s.DB.Find(&candidatos).Error
