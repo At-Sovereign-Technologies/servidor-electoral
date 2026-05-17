@@ -89,9 +89,9 @@ type Votante struct {
 type TipoEleccion string
 
 const (
-	TipoEleccionPresidencial TipoEleccion = "PRESIDENCIAL"
-	TipoEleccionLegislativa  TipoEleccion = "LEGISLATIVA"
-	TipoEleccionTerritorial  TipoEleccion = "TERRITORIAL"
+	TipoEleccionPresidencial TipoEleccion = "presidencial"
+	TipoEleccionLegislativa  TipoEleccion = "legislativa"
+	TipoEleccionTerritorial  TipoEleccion = "territorial"
 )
 
 var AllTipoEleccion = []TipoEleccion{
