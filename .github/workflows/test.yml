@@ -2,9 +2,9 @@ name: Go CI (Test Suite)
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, devel ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, devel ]
   workflow_dispatch:
 
 jobs:
